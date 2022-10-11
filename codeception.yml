@@ -1,0 +1,23 @@
+namespace: App\Tests
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+actor_suffix: Tester
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+        - Codeception\Extension\DotReporter
+params:
+    - .env
+coverage:
+    enabled: true
+    remote: false
+    show_only_summary: true
+    show_uncovered: true
+    include:
+        - src/*
+    exclude:
+        - src/Kernel.php

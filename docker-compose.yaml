@@ -1,0 +1,72 @@
+version: '3.9'
+
+
+services:
+    mysql:
+        image: mysql:8.0.30-debian
+        ports:
+            - 3306:3306
+        restart: always
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'false'
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: demo
+        volumes:
+            - mysql:/var/lib/mysql
+        cap_add:
+            - SYS_NICE
+        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        deploy:
+            resources:
+                limits:
+                    cpus: '1'
+                    memory: 512M
+
+    fpm:
+        build:
+            context: ./.docker/fpm
+        ports:
+            - 9000:9000
+        restart: always
+        environment:
+            APP_ENV: ${APP_ENV}
+            APP_SECRET: ${APP_SECRET}
+            DATABASE_URL: mysql://root:root@mysql:3306/demo?serverVersion=8.0
+        depends_on:
+            - mysql
+        volumes:
+            - ./:/var/www/html
+        deploy:
+            resources:
+                limits:
+                    cpus: '1'
+                    memory: 512M
+
+    nginx:
+        build:
+            context: ./.docker/nginx
+        ports:
+            - 80:80
+        restart: always
+        depends_on:
+            - fpm
+        volumes:
+            - ./public:/var/www/html/public
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.1'
+                    memory: 128M
+
+
+volumes:
+    mysql:
+        driver: local
+
+
+networks:
+    default:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.10.10.0/24
