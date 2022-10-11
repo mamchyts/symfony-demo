@@ -130,6 +130,9 @@
     "league/uri-interfaces": {
         "version": "2.3.0"
     },
+    "mamchyts/cycle-symfony-bundle": {
+        "version": "dev-main"
+    },
     "masterminds/html5": {
         "version": "2.7.5"
     },

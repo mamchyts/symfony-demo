@@ -15,6 +15,9 @@ RUN set -eux \
     && apk add --update --no-cache \
         libzip-dev \
         icu-dev \
+        git \
+        g++ \
+        make \
     && docker-php-ext-install pdo pdo_mysql \
     && docker-php-ext-enable pdo_mysql \
     && docker-php-ext-install zip \
