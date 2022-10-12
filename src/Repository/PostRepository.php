@@ -14,8 +14,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use App\Entity\Tag;
 use App\Pagination\Paginator;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Cycle\SymfonyBundle\Repository\CycleServiceRepository;
 use function Symfony\Component\String\u;
 
 /**
@@ -28,11 +27,11 @@ use function Symfony\Component\String\u;
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class PostRepository extends ServiceEntityRepository
+class PostRepository extends CycleServiceRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public static function getEntityClass(): string
     {
-        parent::__construct($registry, Post::class);
+        return Post::class;
     }
 
     public function findLatest(int $page = 1, Tag $tag = null): Paginator

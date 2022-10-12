@@ -16,8 +16,8 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:               # defines the scalar arguments once and apply them to any service defined/created in this file
             string $locales: '%app_locales%'
-            string $defaultLocale: '%locale%'
-            string $emailSender: '%app.notifications.email_sender%'
+            # string $defaultLocale: '%locale%'
+            # string $emailSender: '%app.notifications.email_sender%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -25,7 +25,9 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
+            - '../src/Command/'
             - '../src/Entity/'
+            - '../src/EventSubscriber/'
             - '../src/Kernel.php'
             - '../src/Tests/'
 

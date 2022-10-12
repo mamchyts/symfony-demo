@@ -25,3 +25,8 @@ yarn-error.log
 
 *.code-workspace
 __cycle-symfony-bundle/
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###

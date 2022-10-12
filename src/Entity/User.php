@@ -12,7 +12,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Cycle\Annotated\Annotation as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,25 +27,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-#[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: 'symfony_demo_user')]
+#[ORM\Entity(table: 'symfony_demo_user', repository: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'primary')]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string')]
     #[Assert\NotBlank]
     private ?string $fullName = null;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'string')]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 50)]
     private ?string $username = null;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'string')]
     #[Assert\Email]
     private ?string $email = null;
 
