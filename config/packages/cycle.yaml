@@ -17,4 +17,9 @@ cycle:
 
     orm:
         schema:
-            dir: '%kernel.project_dir%/src/Entity'
+            directory: '%kernel.project_dir%/src/Entity'
+
+    migration:
+        directory: '%kernel.project_dir%/migrations'
+        table: 'migrations'
+        safe: true
