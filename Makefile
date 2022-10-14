@@ -72,7 +72,7 @@ check.phpstan: ## Run phpstan analyze
 
 
 .PHONY: check.all
-check.all: check.composer-validate check.php-cs-fixer check.phpstan
+check.all: check.php-cs-fixer check.phpstan
 
 
 .PHONY: cache-clear
