@@ -1,16 +1,4 @@
 {
-    "dama/doctrine-test-bundle": {
-        "version": "4.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "4.0",
-            "ref": "56eaa387b5e48ebcc7c95a893b47dfa1ad51449c"
-        },
-        "files": [
-            "config/packages/test/dama_doctrine_test_bundle.yaml"
-        ]
-    },
     "dflydev/dot-access-data": {
         "version": "v3.0.1"
     },
@@ -26,34 +14,6 @@
             "config/routes/annotations.yaml"
         ]
     },
-    "doctrine/cache": {
-        "version": "2.1.1"
-    },
-    "doctrine/dbal": {
-        "version": "3.2.0"
-    },
-    "doctrine/deprecations": {
-        "version": "v0.5.3"
-    },
-    "doctrine/doctrine-bundle": {
-        "version": "2.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.4",
-            "ref": "032f52ed50a27762b78ca6a2aaf432958c473553"
-        },
-        "files": [
-            "config/packages/doctrine.yaml",
-            "config/packages/test/doctrine.yaml",
-            "config/packages/prod/doctrine.yaml",
-            "src/Repository/.gitignore",
-            "src/Entity/.gitignore"
-        ]
-    },
-    "doctrine/event-manager": {
-        "version": "1.1.1"
-    },
     "doctrine/inflector": {
         "version": "2.0.4"
     },
@@ -63,26 +23,8 @@
     "doctrine/lexer": {
         "version": "1.2.1"
     },
-    "doctrine/persistence": {
-        "version": "2.2.3"
-    },
-    "doctrine/sql-formatter": {
-        "version": "1.1.2"
-    },
     "egulias/email-validator": {
         "version": "3.1.2"
-    },
-    "friendsofphp/php-cs-fixer": {
-        "version": "3.11",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "3.0",
-            "ref": "be2103eb4a20942e28a6dd87736669b757132435"
-        },
-        "files": [
-            ".php-cs-fixer.dist.php"
-        ]
     },
     "league/commonmark": {
         "version": "2.1.0"
@@ -97,7 +39,7 @@
         "version": "2.3.0"
     },
     "mamchyts/cycle-symfony-bundle": {
-        "version": "dev-main"
+        "version": "dev-master"
     },
     "masterminds/html5": {
         "version": "2.7.5"
@@ -203,9 +145,6 @@
     },
     "symfony/deprecation-contracts": {
         "version": "v3.0.0"
-    },
-    "symfony/doctrine-bridge": {
-        "version": "v6.0.0"
     },
     "symfony/dom-crawler": {
         "version": "v6.0.0"

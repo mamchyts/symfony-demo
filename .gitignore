@@ -24,7 +24,6 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 *.code-workspace
-__cycle-symfony-bundle/
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
