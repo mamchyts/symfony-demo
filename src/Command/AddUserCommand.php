@@ -56,7 +56,7 @@ class AddUserCommand extends Command
     private SymfonyStyle $io;
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        // private EntityManagerInterface $entityManager,
         private UserPasswordHasherInterface $passwordHasher,
         private Validator $validator,
         private UserRepository $users
