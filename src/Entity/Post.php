@@ -36,6 +36,7 @@ class Post
     private ?int $id = null;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(type: 'string')]
@@ -68,7 +69,7 @@ class Post
      */
     #[ORM\Relation\ManyToMany(target: Tag::class, through: PostTag::class)]
     #[Assert\Count(max: 4, maxMessage: 'post.too_many_tags')]
-    protected Collection $tags;
+    private Collection $tags;
 
     public function __construct()
     {
