@@ -13,7 +13,7 @@ namespace App\Controller;
 
 use App\Form\Type\ChangePasswordType;
 use App\Form\UserType;
-use Doctrine\ORM\EntityManagerInterface;
+use Cycle\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $entityManager->run();
 
             $this->addFlash('success', 'user.updated_successfully');
 
@@ -61,7 +61,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($passwordHasher->hashPassword($user, $form->get('newPassword')->getData()));
-            $entityManager->flush();
+            $entityManager->run();
 
             return $this->redirectToRoute('security_logout');
         }

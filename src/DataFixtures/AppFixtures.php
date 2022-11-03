@@ -15,13 +15,13 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\Tag;
 use App\Entity\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+use Cycle\ORM\EntityManagerInterface;
+use Cycle\SymfonyBundle\Fixture\AbstractFixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use function Symfony\Component\String\u;
 
-class AppFixtures extends Fixture
+class AppFixtures extends AbstractFixture
 {
     public function __construct(
         private UserPasswordHasherInterface $passwordHasher,
@@ -29,14 +29,14 @@ class AppFixtures extends Fixture
     ) {
     }
 
-    public function load(ObjectManager $manager): void
+    public function load(EntityManagerInterface $em): void
     {
-        $this->loadUsers($manager);
-        $this->loadTags($manager);
-        $this->loadPosts($manager);
+        $this->loadUsers($em);
+        $this->loadTags($em);
+        $this->loadPosts($em);
     }
 
-    private function loadUsers(ObjectManager $manager): void
+    private function loadUsers(EntityManagerInterface $em): void
     {
         foreach ($this->getUserData() as [$fullname, $username, $password, $email, $roles]) {
             $user = new User();
@@ -46,27 +46,27 @@ class AppFixtures extends Fixture
             $user->setEmail($email);
             $user->setRoles($roles);
 
-            $manager->persist($user);
+            $em->persist($user);
             $this->addReference($username, $user);
         }
 
-        $manager->flush();
+        $em->run();
     }
 
-    private function loadTags(ObjectManager $manager): void
+    private function loadTags(EntityManagerInterface $em): void
     {
         foreach ($this->getTagData() as $name) {
             $tag = new Tag();
             $tag->setName($name);
 
-            $manager->persist($tag);
+            $em->persist($tag);
             $this->addReference('tag-'.$name, $tag);
         }
 
-        $manager->flush();
+        $em->run();
     }
 
-    private function loadPosts(ObjectManager $manager): void
+    private function loadPosts(EntityManagerInterface $em): void
     {
         foreach ($this->getPostData() as [$title, $slug, $summary, $content, $publishedAt, $author, $tags]) {
             $post = new Post();
@@ -87,10 +87,10 @@ class AppFixtures extends Fixture
                 $post->addComment($comment);
             }
 
-            $manager->persist($post);
+            $em->persist($post);
         }
 
-        $manager->flush();
+        $em->run();
     }
 
     private function getUserData(): array

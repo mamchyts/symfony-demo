@@ -13,6 +13,8 @@ namespace App\Entity;
 
 use App\Repository\PostRepository;
 use Cycle\Annotated\Annotation as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -55,16 +57,24 @@ class Post
     #[ORM\Relation\BelongsTo(target: User::class)]
     private ?User $author = null;
 
+    /**
+     * @var Comment[]|Collection
+     */
     #[ORM\Relation\HasMany(target: Comment::class, orderBy: ['publishedAt' => 'DESC'])]
-    private array $comments;
+    private Collection $comments;
 
+    /**
+     * @var Tag[]|Collection
+     */
     #[ORM\Relation\ManyToMany(target: Tag::class, through: PostTag::class)]
     #[Assert\Count(max: 4, maxMessage: 'post.too_many_tags')]
-    protected array $tags;
+    protected Collection $tags;
 
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
+        $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int

@@ -14,7 +14,7 @@ namespace App\Command;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Utils\Validator;
-use Doctrine\ORM\EntityManagerInterface;
+use Cycle\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -56,7 +56,7 @@ class AddUserCommand extends Command
     private SymfonyStyle $io;
 
     public function __construct(
-        // private EntityManagerInterface $entityManager,
+        private EntityManagerInterface $entityManager,
         private UserPasswordHasherInterface $passwordHasher,
         private Validator $validator,
         private UserRepository $users
@@ -186,7 +186,7 @@ class AddUserCommand extends Command
         $user->setPassword($hashedPassword);
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->entityManager->run();
 
         $this->io->success(sprintf('%s was successfully created: %s (%s)', $isAdmin ? 'Administrator user' : 'User', $user->getUsername(), $user->getEmail()));
 
