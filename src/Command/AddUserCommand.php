@@ -201,7 +201,7 @@ class AddUserCommand extends Command
     private function validateUserData($username, $plainPassword, $email, $fullName): void
     {
         // first check if a user with the same username already exists.
-        $existingUser = $this->users->findOneBy(['username' => $username]);
+        $existingUser = $this->users->findOne(['username' => $username]);
 
         if (null !== $existingUser) {
             throw new RuntimeException(sprintf('There is already a user registered with the "%s" username.', $username));
@@ -213,7 +213,7 @@ class AddUserCommand extends Command
         $this->validator->validateFullName($fullName);
 
         // check if a user with the same email already exists.
-        $existingEmail = $this->users->findOneBy(['email' => $email]);
+        $existingEmail = $this->users->findOne(['email' => $email]);
 
         if (null !== $existingEmail) {
             throw new RuntimeException(sprintf('There is already a user registered with the "%s" email.', $email));

@@ -50,7 +50,7 @@ class BlogController extends AbstractController
     {
         $tag = null;
         if ($request->query->has('tag')) {
-            $tag = $tags->findOneBy(['name' => $request->query->get('tag')]);
+            $tag = $tags->findOne(['name' => $request->query->get('tag')]);
         }
         $latestPosts = $posts->findLatest($page, $tag);
 
@@ -71,7 +71,7 @@ class BlogController extends AbstractController
      * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
      */
     #[Route('/posts/{slug}', methods: ['GET'], name: 'blog_post')]
-    public function postShow(Post $post): Response
+    public function postShow(string $slug, PostRepository $posts): Response
     {
         // Symfony's 'dump()' function is an improved version of PHP's 'var_dump()' but
         // it's not available in the 'prod' environment to prevent leaking sensitive information.
@@ -87,7 +87,7 @@ class BlogController extends AbstractController
         // You can also leverage Symfony's 'dd()' function that dumps and
         // stops the execution
 
-        return $this->render('blog/post_show.html.twig', ['post' => $post]);
+        return $this->render('blog/post_show.html.twig', ['post' => $posts->findOne(['slug' => $slug])]);
     }
 
     /**

@@ -36,21 +36,15 @@ class PostRepository extends CycleServiceRepository
 
     public function findLatest(int $page = 1, Tag $tag = null): Paginator
     {
-        $qb = $this->createQueryBuilder('p')
-            ->addSelect('a', 't')
-            ->innerJoin('p.author', 'a')
-            ->leftJoin('p.tags', 't')
-            ->where('p.publishedAt <= :now')
-            ->orderBy('p.publishedAt', 'DESC')
-            ->setParameter('now', new \DateTime())
-        ;
+        $select = $this->select()
+            ->where('publishedAt', '<=', new \DateTime())
+            ->orderBy('publishedAt', 'DESC');
 
         if (null !== $tag) {
-            $qb->andWhere(':tag MEMBER OF p.tags')
-                ->setParameter('tag', $tag);
+            $select->andWhere('tags.id', '=', $tag->getId());
         }
 
-        return (new Paginator($qb))->paginate($page);
+        return (new Paginator($select))->paginate($page);
     }
 
     /**
@@ -64,20 +58,16 @@ class PostRepository extends CycleServiceRepository
             return [];
         }
 
-        $queryBuilder = $this->createQueryBuilder('p');
+        $select = $this->select();
 
         foreach ($searchTerms as $key => $term) {
-            $queryBuilder
-                ->orWhere('p.title LIKE :t_'.$key)
-                ->setParameter('t_'.$key, '%'.$term.'%')
-            ;
+            $select->orWhere('title', 'like', '%'.$term.'%');
         }
 
-        return $queryBuilder
-            ->orderBy('p.publishedAt', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
+        return $select
+            ->limit($limit)
+            ->orderBy('publishedAt', 'DESC')
+            ->fetchAll();
     }
 
     /**

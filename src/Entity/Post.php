@@ -53,7 +53,7 @@ class Post
     private ?string $content = null;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $publishedAt;
+    private \DateTimeInterface $publishedAt;
 
     #[ORM\Relation\BelongsTo(target: User::class)]
     private ?User $author = null;
@@ -73,9 +73,7 @@ class Post
 
     public function __construct()
     {
-        $this->publishedAt = new \DateTime();
-        $this->comments = new ArrayCollection();
-        $this->tags = new ArrayCollection();
+        $this->publishedAt = new \DateTimeInterface();
     }
 
     public function getId(): ?int
@@ -113,12 +111,12 @@ class Post
         $this->content = $content;
     }
 
-    public function getPublishedAt(): \DateTime
+    public function getPublishedAt(): \DateTimeInterface
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(\DateTime $publishedAt): void
+    public function setPublishedAt(\DateTimeInterface $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
     }

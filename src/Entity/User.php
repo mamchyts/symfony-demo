@@ -50,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    private string $roles;
 
     public function getId(): ?int
     {
@@ -107,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roles = json_decode($this->roles);
 
         // guarantees that a user always has at least one role for security
         if (empty($roles)) {
@@ -119,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setRoles(array $roles): void
     {
-        $this->roles = $roles;
+        $this->roles = json_encode($roles);
     }
 
     /**

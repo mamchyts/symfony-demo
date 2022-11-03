@@ -11,7 +11,7 @@
 
 namespace App\Pagination;
 
-use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
+use Cycle\ORM\Select;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 
@@ -33,7 +33,7 @@ class Paginator
     private int $numResults;
 
     public function __construct(
-        private DoctrineQueryBuilder $queryBuilder,
+        private Select $select,
         private int $pageSize = self::PAGE_SIZE
     ) {
     }
@@ -43,22 +43,14 @@ class Paginator
         $this->currentPage = max(1, $page);
         $firstResult = ($this->currentPage - 1) * $this->pageSize;
 
-        $query = $this->queryBuilder
-            ->setFirstResult($firstResult)
-            ->setMaxResults($this->pageSize)
-            ->getQuery();
+        // get count of all items by query
+        $this->numResults = $this->select->count();
 
-        if (0 === \count($this->queryBuilder->getDQLPart('join'))) {
-            $query->setHint(CountWalker::HINT_DISTINCT, false);
-        }
+        $this->select
+            ->offset($firstResult)
+            ->limit($this->pageSize);
 
-        $paginator = new DoctrinePaginator($query, true);
-
-        $useOutputWalkers = \count($this->queryBuilder->getDQLPart('having') ?: []) > 0;
-        $paginator->setUseOutputWalkers($useOutputWalkers);
-
-        $this->results = $paginator->getIterator();
-        $this->numResults = $paginator->count();
+        $this->results = $this->select->getIterator();
 
         return $this;
     }
