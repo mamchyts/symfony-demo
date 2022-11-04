@@ -82,7 +82,7 @@ class AppFixtures extends AbstractFixture
                 $comment = new Comment();
                 $comment->setAuthor($this->getReference('john_user'));
                 $comment->setContent($this->getRandomText(random_int(255, 512)));
-                $comment->setPublishedAt(new \DateTime('now + '.$i.'seconds'));
+                $comment->setPublishedAt(new \DateTimeImmutable('now + '.$i.'seconds'));
 
                 $post->addComment($comment);
             }
@@ -128,7 +128,7 @@ class AppFixtures extends AbstractFixture
                 $this->slugger->slug($title)->lower(),
                 $this->getRandomText(),
                 $this->getPostContent(),
-                new \DateTime('now - '.$i.'days'),
+                new \DateTimeImmutable('now - '.$i.'days'),
                 // Ensure that the first post is written by Jane Doe to simplify tests
                 $this->getReference(['jane_admin', 'tom_admin'][0 === $i ? 0 : random_int(0, 1)]),
                 $this->getRandomTags(),
