@@ -41,14 +41,14 @@ class Comment
     private ?string $content = null;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $publishedAt;
+    private \DateTimeImmutable $publishedAt;
 
     #[ORM\Relation\BelongsTo(target: User::class)]
     private ?User $author = null;
 
     public function __construct()
     {
-        $this->publishedAt = new \DateTimeInterface();
+        $this->publishedAt = new \DateTimeImmutable();
     }
 
     #[Assert\IsTrue(message: 'comment.is_spam')]
@@ -74,12 +74,12 @@ class Comment
         $this->content = $content;
     }
 
-    public function getPublishedAt(): \DateTimeInterface
+    public function getPublishedAt(): \DateTimeImmutable
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(\DateTimeInterface $publishedAt): void
+    public function setPublishedAt(\DateTimeImmutable $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
     }
