@@ -11,7 +11,8 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommentRepository;
+use Cycle\Annotated\Annotation as ORM;
 use function Symfony\Component\String\u;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,17 +26,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-#[ORM\Entity]
-#[ORM\Table(name: 'symfony_demo_comment')]
+#[ORM\Entity(table: 'symfony_demo_comment', repository: CommentRepository::class)]
 class Comment
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'primary')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Post::class, inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Relation\BelongsTo(target: Post::class)]
     private ?Post $post = null;
 
     #[ORM\Column(type: 'text')]
@@ -44,15 +41,14 @@ class Comment
     private ?string $content = null;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $publishedAt;
+    private \DateTimeImmutable $publishedAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Relation\BelongsTo(target: User::class)]
     private ?User $author = null;
 
     public function __construct()
     {
-        $this->publishedAt = new \DateTime();
+        $this->publishedAt = new \DateTimeImmutable();
     }
 
     #[Assert\IsTrue(message: 'comment.is_spam')]
@@ -78,12 +74,12 @@ class Comment
         $this->content = $content;
     }
 
-    public function getPublishedAt(): \DateTime
+    public function getPublishedAt(): \DateTimeImmutable
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(\DateTime $publishedAt): void
+    public function setPublishedAt(\DateTimeImmutable $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
     }

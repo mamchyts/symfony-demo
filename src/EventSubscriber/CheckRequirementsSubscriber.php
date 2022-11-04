@@ -11,8 +11,8 @@
 
 namespace App\EventSubscriber;
 
+use Cycle\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Exception\DriverException;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Style\SymfonyStyle;

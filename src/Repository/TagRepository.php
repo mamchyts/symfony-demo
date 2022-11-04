@@ -12,8 +12,7 @@
 namespace App\Repository;
 
 use App\Entity\Tag;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Cycle\SymfonyBundle\Repository\CycleServiceRepository;
 
 /**
  * This custom Doctrine repository is empty because so far we don't need any custom
@@ -24,10 +23,10 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class TagRepository extends ServiceEntityRepository
+class TagRepository extends CycleServiceRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public static function getEntityClass(): string
     {
-        parent::__construct($registry, Tag::class);
+        return Tag::class;
     }
 }

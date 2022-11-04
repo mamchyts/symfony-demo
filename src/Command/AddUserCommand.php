@@ -14,7 +14,7 @@ namespace App\Command;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Utils\Validator;
-use Doctrine\ORM\EntityManagerInterface;
+use Cycle\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -186,7 +186,7 @@ class AddUserCommand extends Command
         $user->setPassword($hashedPassword);
 
         $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->entityManager->run();
 
         $this->io->success(sprintf('%s was successfully created: %s (%s)', $isAdmin ? 'Administrator user' : 'User', $user->getUsername(), $user->getEmail()));
 
@@ -201,7 +201,7 @@ class AddUserCommand extends Command
     private function validateUserData($username, $plainPassword, $email, $fullName): void
     {
         // first check if a user with the same username already exists.
-        $existingUser = $this->users->findOneBy(['username' => $username]);
+        $existingUser = $this->users->findOne(['username' => $username]);
 
         if (null !== $existingUser) {
             throw new RuntimeException(sprintf('There is already a user registered with the "%s" username.', $username));
@@ -213,7 +213,7 @@ class AddUserCommand extends Command
         $this->validator->validateFullName($fullName);
 
         // check if a user with the same email already exists.
-        $existingEmail = $this->users->findOneBy(['email' => $email]);
+        $existingEmail = $this->users->findOne(['email' => $email]);
 
         if (null !== $existingEmail) {
             throw new RuntimeException(sprintf('There is already a user registered with the "%s" email.', $email));

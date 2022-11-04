@@ -11,7 +11,8 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TagRepository;
+use Cycle\Annotated\Annotation as ORM;
 
 /**
  * Defines the properties of the Tag entity to represent the post tags.
@@ -20,16 +21,13 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-#[ORM\Entity]
-#[ORM\Table(name: 'symfony_demo_tag')]
+#[ORM\Entity(table: 'symfony_demo_tag', repository: TagRepository::class)]
 class Tag implements \JsonSerializable
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'primary')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'string')]
     private ?string $name = null;
 
     public function getId(): ?int

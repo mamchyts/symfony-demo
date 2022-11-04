@@ -14,7 +14,7 @@ namespace App\Command;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Utils\Validator;
-use Doctrine\ORM\EntityManagerInterface;
+use Cycle\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -121,8 +121,8 @@ class DeleteUserCommand extends Command
         // See https://www.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html#removing-entities
         $userId = $user->getId();
 
-        $this->entityManager->remove($user);
-        $this->entityManager->flush();
+        $this->entityManager->delete($user);
+        $this->entityManager->run();
 
         $userUsername = $user->getUsername();
         $userEmail = $user->getEmail();

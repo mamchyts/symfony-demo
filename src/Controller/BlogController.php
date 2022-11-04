@@ -17,7 +17,8 @@ use App\Event\CommentCreatedEvent;
 use App\Form\CommentType;
 use App\Repository\PostRepository;
 use App\Repository\TagRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
+use Cycle\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -50,7 +51,7 @@ class BlogController extends AbstractController
     {
         $tag = null;
         if ($request->query->has('tag')) {
-            $tag = $tags->findOneBy(['name' => $request->query->get('tag')]);
+            $tag = $tags->findOne(['name' => $request->query->get('tag')]);
         }
         $latestPosts = $posts->findLatest($page, $tag);
 
@@ -71,7 +72,7 @@ class BlogController extends AbstractController
      * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
      */
     #[Route('/posts/{slug}', methods: ['GET'], name: 'blog_post')]
-    public function postShow(Post $post): Response
+    public function postShow(string $slug, PostRepository $posts): Response
     {
         // Symfony's 'dump()' function is an improved version of PHP's 'var_dump()' but
         // it's not available in the 'prod' environment to prevent leaking sensitive information.
@@ -87,7 +88,7 @@ class BlogController extends AbstractController
         // You can also leverage Symfony's 'dd()' function that dumps and
         // stops the execution
 
-        return $this->render('blog/post_show.html.twig', ['post' => $post]);
+        return $this->render('blog/post_show.html.twig', ['post' => $posts->findOne(['slug' => $slug])]);
     }
 
     /**
@@ -98,11 +99,15 @@ class BlogController extends AbstractController
      */
     #[Route('/comment/{postSlug}/new', methods: ['POST'], name: 'comment_new')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[ParamConverter('post', options: ['mapping' => ['postSlug' => 'slug']])]
-    public function commentNew(Request $request, Post $post, EventDispatcherInterface $eventDispatcher, EntityManagerInterface $entityManager): Response
+    public function commentNew(Request $request, string $postSlug, PostRepository $posts, UserRepository $users, EventDispatcherInterface $eventDispatcher, EntityManagerInterface $entityManager): Response
     {
         $comment = new Comment();
-        $comment->setAuthor($this->getUser());
+
+        // @todo fix error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '3' for key 'symfony_demo_user.PRIMARY'
+        // `$this->getUser()` return clear User entity, without EntityProxyInterface wrapper
+        $comment->setAuthor($users->findByPK($this->getUser()->getId()));
+
+        $post = $posts->findOne(['slug' => $postSlug]);
         $post->addComment($comment);
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -110,7 +115,7 @@ class BlogController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($comment);
-            $entityManager->flush();
+            $entityManager->run();
 
             // When an event is dispatched, Symfony notifies it to all the listeners
             // and subscribers registered to it. Listeners can modify the information
@@ -136,12 +141,12 @@ class BlogController extends AbstractController
      * The "id" of the Post is passed in and then turned into a Post object
      * automatically by the ParamConverter.
      */
-    public function commentForm(Post $post): Response
+    public function commentForm(string $id, PostRepository $posts): Response
     {
         $form = $this->createForm(CommentType::class);
 
         return $this->render('blog/_comment_form.html.twig', [
-            'post' => $post,
+            'post' => $posts->findOne(['id' => $id]),
             'form' => $form->createView(),
         ]);
     }

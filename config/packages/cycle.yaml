@@ -1,0 +1,25 @@
+cycle:
+    databases:
+        - { default: true, connection: primary }
+        - { default: false, connection: secondary }
+
+    connections:
+        primary:
+            type: mysql
+            dsn: 'mysql:host=mysql;port=3306;dbname=demo'
+            user: root
+            password: root
+        secondary:
+            type: mysql
+            dsn: 'mysql:host=mysql;port=3306;dbname=demo'
+            user: root
+            password: root
+
+    orm:
+        schema:
+            directory: '%kernel.project_dir%/src/Entity'
+
+    migration:
+        directory: '%kernel.project_dir%/migrations'
+        table: 'migrations'
+        safe: true
