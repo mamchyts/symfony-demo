@@ -74,8 +74,8 @@ class Post
     public function __construct()
     {
         $this->publishedAt = new \DateTimeImmutable();
-        $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
